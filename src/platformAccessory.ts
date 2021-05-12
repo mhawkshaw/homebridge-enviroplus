@@ -26,7 +26,7 @@ export class EnviroplusSensor {
   /**
    * Gets the Enviroplus JSON data from the specified URI
    */
-   getEnviroValues(url: string): Promise<string> {
+  getEnviroValues(url: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const req = new XMLHttpRequest();
       req.open('GET', url);
@@ -63,21 +63,17 @@ export class EnviroplusSensor {
 
       if (this.sensorData.P2 <= this.platform.config.excellent) {
         this.sensorData.airQuality = this.platform.Characteristic.AirQuality.EXCELLENT;
-      }
-      else if (this.sensorData.P2 > this.platform.config.excellent && this.sensorData.P2 <= this.platform.config.good) {
+      } else if (this.sensorData.P2 > this.platform.config.excellent && this.sensorData.P2 <= this.platform.config.good) {
         this.sensorData.airQuality = this.platform.Characteristic.AirQuality.GOOD;
-      }
-      else if (this.sensorData.P2 > this.platform.config.good && this.sensorData.P2 <= this.platform.config.fair) {
+      } else if (this.sensorData.P2 > this.platform.config.good && this.sensorData.P2 <= this.platform.config.fair) {
         this.sensorData.airQuality = this.platform.Characteristic.AirQuality.FAIR;
-      }
-      else if (this.sensorData.P2 > this.platform.config.fair && this.sensorData.P2 <= this.platform.config.inferior) {
+      } else if (this.sensorData.P2 > this.platform.config.fair && this.sensorData.P2 <= this.platform.config.inferior) {
         this.sensorData.airQuality = this.platform.Characteristic.AirQuality.INFERIOR;
-      }
-      else if (this.sensorData.P2 > this.platform.config.poor) {
+      } else if (this.sensorData.P2 > this.platform.config.poor) {
         this.sensorData.airQuality = this.platform.Characteristic.AirQuality.POOR;
       }
     }).catch(error => {
-      this.platform.log.error("Unable to obtain data from Enviro+ Server", this.platform.config.server, error);
+      this.platform.log.error('Unable to obtain data from Enviro+ Server', this.platform.config.server, error);
     });
   }
 
@@ -89,20 +85,23 @@ export class EnviroplusSensor {
     // set accessory information
     const accessoryInfo: Service | undefined = this.accessory.getService(this.platform.Service.AccessoryInformation);
 
-    if (accessoryInfo != null) {
+    if (accessoryInfo !== undefined) {
       accessoryInfo.setCharacteristic(this.platform.Characteristic.Manufacturer, 'Pimoroni')
         .setCharacteristic(this.platform.Characteristic.Model, 'EnviroPlus')
         .setCharacteristic(this.platform.Characteristic.SerialNumber, this.platform.config.serial);
     }
 
-    this.airQualityService = this.accessory.getService(this.platform.Service.AirQualitySensor) || this.accessory.addService(this.platform.Service.AirQualitySensor);
-    this.temperatureService = this.accessory.getService(this.platform.Service.TemperatureSensor) || this.accessory.addService(this.platform.Service.TemperatureSensor);
-    this.humidityService = this.accessory.getService(this.platform.Service.HumiditySensor) || this.accessory.addService(this.platform.Service.HumiditySensor);
+    this.airQualityService = this.accessory.getService(this.platform.Service.AirQualitySensor) ||
+      this.accessory.addService(this.platform.Service.AirQualitySensor);
+    this.temperatureService = this.accessory.getService(this.platform.Service.TemperatureSensor) ||
+      this.accessory.addService(this.platform.Service.TemperatureSensor);
+    this.humidityService = this.accessory.getService(this.platform.Service.HumiditySensor) || 
+      this.accessory.addService(this.platform.Service.HumiditySensor);
 
     // set the service name, this is what is displayed as the default name on the Home app
-    this.airQualityService.setCharacteristic(this.platform.Characteristic.Name, "Air Quality");
-    this.temperatureService.setCharacteristic(this.platform.Characteristic.Name, "Temperature");
-    this.humidityService.setCharacteristic(this.platform.Characteristic.Name, "Humidity");
+    this.airQualityService.setCharacteristic(this.platform.Characteristic.Name, 'Air Quality');
+    this.temperatureService.setCharacteristic(this.platform.Characteristic.Name, 'Temperature');
+    this.humidityService.setCharacteristic(this.platform.Characteristic.Name, 'Humidity');
 
     // register handlers
     this.airQualityService.getCharacteristic(this.platform.Characteristic.AirQuality)

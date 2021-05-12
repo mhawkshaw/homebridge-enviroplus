@@ -15,7 +15,8 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
   public readonly accessories: PlatformAccessory[] = [];
 
   private configProvided() {
-    return this.config.server != null && this.config.serial != null && this.config.excellent != null && this.config.good != null && this.config.fair != null && this.config.inferior != null && this.config.poor != null;
+    return this.config.server !== null && this.config.serial !== null && this.config.excellent !== null && this.config.good !== null &&
+           this.config.fair !== null && this.config.inferior !== null && this.config.poor !== null;
   }
 
   constructor(
@@ -26,8 +27,8 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
 
     // Checks whether a configuration is provided, otherwise the plugin should not be initialized
     if (!this.configProvided()) {
-      log.error("Not all configuration provided!");
-      log.info("Server for enviroment data is required along with the upper limits for the air quality and the serial number of the enviroplus device");
+      log.error('Not all configuration provided!');
+      log.info('Server for enviroment data is required along with the serial number of the enviroplus device');
       return;
     }
 
