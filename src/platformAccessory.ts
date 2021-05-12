@@ -95,7 +95,7 @@ export class EnviroplusSensor {
       this.accessory.addService(this.platform.Service.AirQualitySensor);
     this.temperatureService = this.accessory.getService(this.platform.Service.TemperatureSensor) ||
       this.accessory.addService(this.platform.Service.TemperatureSensor);
-    this.humidityService = this.accessory.getService(this.platform.Service.HumiditySensor) || 
+    this.humidityService = this.accessory.getService(this.platform.Service.HumiditySensor) ||
       this.accessory.addService(this.platform.Service.HumiditySensor);
 
     // set the service name, this is what is displayed as the default name on the Home app

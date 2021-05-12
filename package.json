@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mhawkshaw/homebridge-enviroplus"
+    "url": "git+https://github.com/mhawkshaw/homebridge-enviroplus.git"
   },
   "bugs": {
     "url": "https://github.com/mhawkshaw/homebridge-enviroplus/issues"
@@ -39,5 +39,6 @@
     "rimraf": "^3.0.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.2"
-  }
+  },
+  "homepage": "https://github.com/mhawkshaw/homebridge-enviroplus#readme"
 }
