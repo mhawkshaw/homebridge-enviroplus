@@ -6,145 +6,57 @@
 </p>
 
 
-# Homebridge Platform Plugin Template
+# Pimoroni Enviro+ Homebridge Plug-in
 
-This is a template Homebridge platform plugin and can be used as a base to help you get started developing your own plugin.
+This Homebridge plug-in allows you to make the data available from the [Pimoroni Enviro+](https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-enviro-plus) device connected to a [Raspberry Pi](https://www.raspberrypi.org/).
 
-This template should be used in conjunction with the [developer documentation](https://developers.homebridge.io/). A full list of all supported service types, and their characteristics is available on this site.
+## Setup Python Server
 
-## Clone As Template
+This Homebridge plug-in reads the data from a web server providing the JSON information, for example:
 
-Click the link below to create a new GitHub Repository using this template, or click the *Use This Template* button above.
+* {"temperature": "13.68", "pressure": "99529.24", "humidity": "75.12", "P2": "19", "P1": "23"}
 
-<span align="center">
+Included in the python directory on the [GitHub repository](https://github.com/mhawkshaw/homebridge-enviroplus) for this plug-in you can find an example web server written in Python that you can run on the Raspberry Pi that has the Enviro+ connected to make this data available. This configuration is useful if you are not running the Homebridge server on the same machine that has the Enviro+ connected (most use cases).
 
-### [Create New Repository From Template](https://github.com/homebridge/homebridge-plugin-template/generate)
+## Plug-in Installation
 
-</span>
+Follow the [homebridge installation instructions](https://www.npmjs.com/package/homebridge) if you haven't already.
 
-## Setup Development Environment
+Install this plugin globally:
 
-To develop Homebridge plugins you must have Node.js 12 or later installed, and a modern code editor such as [VS Code](https://code.visualstudio.com/). This plugin template uses [TypeScript](https://www.typescriptlang.org/) to make development easier and comes with pre-configured settings for [VS Code](https://code.visualstudio.com/) and ESLint. If you are using VS Code install these extensions:
+    npm install -g homebridge-enviroplus
 
-* [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+Add platform to `config.json`, for configuration see below.
 
-## Install Development Dependencies
+## Plug-in Configuration
 
-Using a terminal, navigate to the project folder and run this command to install the development dependencies:
+The plug-in needs to know where to find the web server providing the JSON data (e.g. http://127.0.0.1:8001) along with the serial number of the device to uniquely identify it (you can also use your Raspberry Pi identifier).
 
-```
-npm install
-```
-
-## Update package.json
-
-Open the [`package.json`](./package.json) and change the following attributes:
-
-* `name` - this should be prefixed with `homebridge-` or `@username/homebridge-` and contain no spaces or special characters apart from a dashes
-* `displayName` - this is the "nice" name displayed in the Homebridge UI
-* `repository.url` - Link to your GitHub repo
-* `bugs.url` - Link to your GitHub repo issues page
-
-When you are ready to publish the plugin you should set `private` to false, or remove the attribute entirely.
-
-## Update Plugin Defaults
-
-Open the [`src/settings.ts`](./src/settings.ts) file and change the default values:
-
-* `PLATFORM_NAME` - Set this to be the name of your platform. This is the name of the platform that users will use to register the plugin in the Homebridge `config.json`.
-* `PLUGIN_NAME` - Set this to be the same name you set in the [`package.json`](./package.json) file. 
-
-Open the [`config.schema.json`](./config.schema.json) file and change the following attribute:
-
-* `pluginAlias` - set this to match the `PLATFORM_NAME` you defined in the previous step.
-
-## Build Plugin
-
-TypeScript needs to be compiled into JavaScript before it can run. The following command will compile the contents of your [`src`](./src) directory and put the resulting code into the `dist` folder.
+```json
+{
+  "platforms": [
+    {
+      "platform": "EnviroplusAirQuality",
+      "name": "EnviroplusPlatform",
+      "server": "http://127.0.0.1:8001/",
+      "serial": "1234567890",
+      "interval": 5,
+      "excellent": 10,
+      "good": 20,
+      "fair": 25,
+      "inferior": 50,
+      "poor": 50
+    }
+  ]
+}
 
 ```
-npm run build
-```
 
-## Link To Homebridge
+The following settings are optional:
 
-Run this command so your global install of Homebridge can discover the plugin in your development environment:
-
-```
-npm link
-```
-
-You can now start Homebridge, use the `-D` flag so you can see debug log messages in your plugin:
-
-```
-homebridge -D
-```
-
-## Watch For Changes and Build Automatically
-
-If you want to have your code compile automatically as you make changes, and restart Homebridge automatically between changes you can run:
-
-```
-npm run watch
-```
-
-This will launch an instance of Homebridge in debug mode which will restart every time you make a change to the source code. It will load the config stored in the default location under `~/.homebridge`. You may need to stop other running instances of Homebridge while using this command to prevent conflicts. You can adjust the Homebridge startup command in the [`nodemon.json`](./nodemon.json) file.
-
-## Customise Plugin
-
-You can now start customising the plugin template to suit your requirements.
-
-* [`src/platform.ts`](./src/platform.ts) - this is where your device setup and discovery should go.
-* [`src/platformAccessory.ts`](./src/platformAccessory.ts) - this is where your accessory control logic should go, you can rename or create multiple instances of this file for each accessory type you need to implement as part of your platform plugin. You can refer to the [developer documentation](https://developers.homebridge.io/) to see what characteristics you need to implement for each service type.
-* [`config.schema.json`](./config.schema.json) - update the config schema to match the config you expect from the user. See the [Plugin Config Schema Documentation](https://developers.homebridge.io/#/config-schema).
-
-## Versioning Your Plugin
-
-Given a version number `MAJOR`.`MINOR`.`PATCH`, such as `1.4.3`, increment the:
-
-1. **MAJOR** version when you make breaking changes to your plugin,
-2. **MINOR** version when you add functionality in a backwards compatible manner, and
-3. **PATCH** version when you make backwards compatible bug fixes.
-
-You can use the `npm version` command to help you with this:
-
-```bash
-# major update / breaking changes
-npm version major
-
-# minor update / new features
-npm version update
-
-# patch / bugfixes
-npm version patch
-```
-
-## Publish Package
-
-When you are ready to publish your plugin to [npm](https://www.npmjs.com/), make sure you have removed the `private` attribute from the [`package.json`](./package.json) file then run:
-
-```
-npm publish
-```
-
-If you are publishing a scoped plugin, i.e. `@username/homebridge-xxx` you will need to add `--access=public` to command the first time you publish.
-
-#### Publishing Beta Versions
-
-You can publish *beta* versions of your plugin for other users to test before you release it to everyone.
-
-```bash
-# create a new pre-release version (eg. 2.1.0-beta.1)
-npm version prepatch --preid beta
-
-# publsh to @beta
-npm publish --tag=beta
-```
-
-Users can then install the  *beta* version by appending `@beta` to the install command, for example:
-
-```
-sudo npm install -g homebridge-example-plugin@beta
-```
-
-
+- `interval`: how often (in minutes) the plug-in will fetch new Enviro+ data from the server. Default is 5.
+- `excellent`: the upper value for PM2.5 air quality considered to be excellent (in micrograms per cubic metre). Default is 10.
+- `good`: the upper value for PM2.5 air quality considered to be good (in micrograms per cubic metre). Default is 20.
+- `fair`: the upper value for PM2.5 air quality considered to be fair (in micrograms per cubic metre). Default is 25.
+- `inferior`: the upper value for PM2.5 air quality considered to be inferior (in micrograms per cubic metre). Default is 50.
+- `poor`: the lowest value for PM2.5 air quality considered to be poor (in micrograms per cubic metre). Anything above this is considered to be poor. Default is 50.
