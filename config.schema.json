@@ -1,15 +1,68 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "LuftdatenAirQuality",
   "pluginType": "platform",
   "singular": true,
+  "headerDisplay": "The Pimoroni Enviro+ Sensor for the Raspberry Pi provides environmental data.",
   "schema": {
     "type": "object",
     "properties": {
-      "name": {
-        "title": "Name",
+      "server": {
+        "title": "Enviro+ JSON Server",
         "type": "string",
         "required": true,
-        "default": "Example Dynamic Platform"
+        "format": "uri"
+      },
+      "serial": {
+        "title": "Enviro+ Serial Number",
+        "type": "string",
+        "required": true
+      },
+      "interval": {
+        "title": "How often to fetch updated environment values from the Enviro+ server in minutes",
+        "type": "integer",
+        "required": true,
+        "default": 5,
+        "minimum": 1
+      },
+      "excellent": {
+        "title": "The upper value for PM2.5 air quality considered to be excellent (in micrograms per cubic metre)",
+        "type": "integer",
+        "required": true,
+        "minimum": 0,
+        "maximum": 1000,
+        "default": 10
+      },
+      "good": {
+        "title": "The upper value for PM2.5 air quality considered to be good (in micrograms per cubic metre)",
+        "type": "integer",
+        "required": true,
+        "minimum": 0,
+        "maximum": 1000,
+        "default": 20
+      },
+      "fair": {
+        "title": "The upper value for PM2.5 air quality considered to be fair (in micrograms per cubic metre)",
+        "type": "integer",
+        "required": true,
+        "minimum": 0,
+        "maximum": 1000,
+        "default": 25
+      },
+      "inferior": {
+        "title": "The upper value for PM2.5 air quality considered to be inferior (in micrograms per cubic metre)",
+        "type": "integer",
+        "required": true,
+        "minimum": 0,
+        "maximum": 1000,
+        "default": 50
+      },
+      "poor": {
+        "title": "The lowest value for PM2.5 air quality considered to be poor (in micrograms per cubic metre). Anything above this is included.",
+        "type": "integer",
+        "required": true,
+        "minimum": 0,
+        "maximum": 1000,
+        "default": 50
       }
     }
   }
