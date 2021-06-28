@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "LuftdatenAirQuality",
+  "pluginAlias": "EnviroplusAirQuality",
   "pluginType": "platform",
   "singular": true,
   "headerDisplay": "The Pimoroni Enviro+ Sensor for the Raspberry Pi provides environmental data.",
@@ -10,12 +10,14 @@
         "title": "Enviro+ JSON Server",
         "type": "string",
         "required": true,
-        "format": "uri"
+        "format": "uri",
+        "default": "http://127.0.0.1:8001/"
       },
       "serial": {
         "title": "Enviro+ Serial Number",
         "type": "string",
-        "required": true
+        "required": true,
+        "default": "1234567890"
       },
       "interval": {
         "title": "How often to fetch updated environment values from the Enviro+ server in minutes",
