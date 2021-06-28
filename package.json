@@ -1,7 +1,7 @@
 {
   "displayName": "Homebridge Enviroplus",
   "name": "homebridge-enviroplus",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fetches information from Raspberry Pi Enviroplus sensors for air quality.",
   "license": "Apache-2.0",
   "repository": {
