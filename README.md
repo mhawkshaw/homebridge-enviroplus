@@ -10,6 +10,8 @@
 
 This Homebridge plug-in allows you to make the data available from the [Pimoroni Enviro+](https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-enviro-plus) device connected to a [Raspberry Pi](https://www.raspberrypi.org/).
 
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
+
 ## Setup Python Server
 
 This Homebridge plug-in reads the data from a web server providing the JSON information, for example:
