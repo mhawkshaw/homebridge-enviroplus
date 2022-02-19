@@ -18,7 +18,7 @@ This Homebridge plug-in reads the data from a web server providing the JSON info
 
 * {"temperature": "13.68", "pressure": "99529.24", "humidity": "75.12", "P2": "19", "P1": "23"}
 
-Included in the python directory on the [GitHub repository](https://github.com/mhawkshaw/homebridge-enviroplus) for this plug-in you can find an example web server written in Python that you can run on the Raspberry Pi that has the Enviro+ connected to make this data available. This configuration is useful if you are not running the Homebridge server on the same machine that has the Enviro+ connected (most use cases).
+Included in the python directory on the [GitHub repository](https://github.com/mhawkshaw/homebridge-enviroplus) for this plug-in you can find an example web server written in Python that you can run on the Raspberry Pi that has the Enviro+ connected to make this data available. This configuration is useful if you are not running the Homebridge server on the same machine that has the Enviro+ connected (most use cases). You can optionally enable IPv6 support by starting the script with the --enableipv6 flag.
 
 ## Plug-in Installation
 
