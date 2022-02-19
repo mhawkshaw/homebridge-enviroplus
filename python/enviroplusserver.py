@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import socket
+import argparse
+from threading import Thread
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from http import HTTPStatus
 import json
@@ -21,6 +24,8 @@ bme280 = BME280(i2c_dev=bus)
 
 # Create PMS5003 instance
 pms5003 = PMS5003()
+
+httpd = None
 
 # Read values from BME280 and PMS5003 and return as dict
 def read_values():
@@ -53,6 +58,8 @@ class _RequestHandler(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(HTTPStatus.OK.value)
         self.send_header('Content-type', 'application/json')
+        # Allow requests from any origin, so CORS policies don't
+        # prevent local development.
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
@@ -62,25 +69,40 @@ class _RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(values).encode('utf-8'))
 
     def do_OPTIONS(self):
+        # Send allow-origin header for preflight POST XHRs.
         self.send_response(HTTPStatus.NO_CONTENT.value)
         self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST')
         self.send_header('Access-Control-Allow-Headers', 'content-type')
         self.end_headers()
 
+class HTTPServerV6(HTTPServer):
+    address_family = socket.AF_INET6
 
-def run_server():
-    server_address = ('', 8001)
-    httpd = HTTPServer(server_address, _RequestHandler)
+def run_server(ipv6: bool):
+    global httpd
+    if (ipv6):
+        server_address = ('::', 8001)
+        httpd = HTTPServerV6(server_address, _RequestHandler)
+    else:
+        server_address = ('', 8001)
+        httpd = HTTPServer(server_address, _RequestHandler)
+    
     print('serving at %s:%d' % server_address)
     httpd.serve_forever()
 
 def handler(signal_received, frame):
     # Handle any cleanup here
     print('SIGINT or CTRL-C detected. Exiting gracefully')
-    conn.close()
-    exit(0)
+    if (httpd is not None):
+        httpd.shutdown()
 
 if __name__ == '__main__':
-    run_server()
     signal(SIGINT, handler)
+    parser = argparse.ArgumentParser(description='Provides the values from the Enviroplus sensor as JSON values over HTTP')
+    parser.add_argument('--enableipv6', action='store_true', help='Enable IPv6 support')
+    args = parser.parse_args()
+
+    serverthread = Thread(target=run_server, args=[args.enableipv6])
+    serverthread.start()
+    serverthread.join()
