@@ -16,7 +16,6 @@ This Homebridge plug-in allows you to make the data available from the [Pimoroni
 
 This Homebridge plug-in reads the data from an MQTT broker providing the JSON information, for example:
 
-* {"temperature": "13.68", "pressure": "99529.24", "humidity": "75.12", "P2": "19", "P1": "23"}
 * {"temperature": 24, "pressure": 99080, "humidity": 47, "oxidised": 33, "reduced": 1024, "nh3": 1810, "lux": 0, "pm1": 6, "pm25": 7, "pm10": 7, "serial": "0000000012345def"}
 
 Included in the examples on the [Pimoroni Enviroplus GitHub repository](https://github.com/pimoroni/enviroplus-python/tree/master/examples) you can find a Python script called "mqtt-all.py" that will read the information from the Enviro+ sensors and pass them as JSON values to an MQTT broker. Just start the script, for example:
@@ -96,4 +95,4 @@ The following settings are optional:
 - `poor`: the lowest value for PM2.5 air quality considered to be poor (in micrograms per cubic metre). Anything above this is considered to be poor. Default is 50.
 - `COWarningLevel`: Carbon Monoxide warning level. Measurements above this value are considered abnormal. Default is 30.
 
-Note that there are no international standards for what's considered an abnormal level of Carbon Monoxide (CO). The U.S. National Ambient Air Quality Standards for outdoor air are 9 ppm for 8 hours, and 35 ppm for 1 hour.
+Note that there are no international standards for what's considered an abnormal level of Carbon Monoxide (CO). The U.S. National Ambient Air Quality Standards for outdoor air are 9 ppm for 8 hours, and 35 ppm for 1 hour. 
