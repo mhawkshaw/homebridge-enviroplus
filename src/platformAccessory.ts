@@ -1,4 +1,4 @@
-import { Service, PlatformAccessory, Characteristic } from 'homebridge';
+import { Service, PlatformAccessory } from 'homebridge';
 
 import { EnviroplusPlatform } from './platform';
 
@@ -69,12 +69,8 @@ export class EnviroplusSensor {
   }
 
   shutdown() {
-    this.platform.log.debug("Shutdown called. Unsubscribing from MQTT broker.")
-    this.mqttClient.unsubscribe(this.platform.config.topic, (error, packet) => {
-      if (error) {
-        this.platform.log.error(error.message);
-      }
-    });
+    this.platform.log.debug('Shutdown called. Unsubscribing from MQTT broker.');
+    this.mqttClient.unsubscribe(this.platform.config.topic);
     this.mqttClient.end();
   }
 
@@ -124,8 +120,8 @@ export class EnviroplusSensor {
     // Connect to MQTT broker
     const options = {
       username: this.platform.config.username,
-      password: this.platform.config.password
-    }
+      password: this.platform.config.password,
+    };
 
     let brokerUrl = this.platform.config.server;
 
@@ -138,17 +134,17 @@ export class EnviroplusSensor {
 
     this.mqttClient.subscribe(this.platform.config.topic, { qos: 0 }, (error, granted) => {
       if (error) {
-        this.platform.log.error("Unable to connect to the MQTT broker: " + error.name + " " + error.message);
+        this.platform.log.error('Unable to connect to the MQTT broker: ' + error.name + " " + error.message);
       } else {
-        this.platform.log.debug(`${granted[0].topic} was subscribed`);
+        this.platform.log.debug('${granted[0].topic} was subscribed');
       }
-    })
+    });
 
-    this.mqttClient.on("message", (topic, message) => {
-      this.platform.log.debug(message.toString("utf-8"));
-      let enviroPlusData: EnviroPlusJson = JSON.parse(message.toString("utf-8"));
+    this.mqttClient.on('message', (topic, message) => {
+      this.platform.log.debug(message.toString('utf-8'));
+      const enviroPlusData: EnviroPlusJson = JSON.parse(message.toString('utf-8'));
       this.mapJsonData(enviroPlusData);
-    })
+    });
   }
 
   /**
