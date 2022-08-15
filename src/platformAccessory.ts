@@ -134,9 +134,9 @@ export class EnviroplusSensor {
 
     this.mqttClient.subscribe(this.platform.config.topic, { qos: 0 }, (error, granted) => {
       if (error) {
-        this.platform.log.error('Unable to connect to the MQTT broker: ' + error.name + " " + error.message);
+        this.platform.log.error('Unable to connect to the MQTT broker: ' + error.name + ' ' + error.message);
       } else {
-        this.platform.log.debug('${granted[0].topic} was subscribed');
+        this.platform.log.debug(granted[0].topic + ' was subscribed');
       }
     });
 
@@ -186,11 +186,4 @@ export class EnviroplusSensor {
 
     return this.sensorData.lux;
   }
-}
-function options(arg0: string, options: any) {
-  throw new Error('Function not implemented.');
-}
-
-function callback(arg0: string, options: { username: string; password: string; }, callback: any) {
-  throw new Error('Function not implemented.');
 }
