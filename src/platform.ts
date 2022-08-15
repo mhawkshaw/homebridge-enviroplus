@@ -16,8 +16,10 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
 
   private configProvided() {
     return this.config.server !== null && this.config.serial !== null && this.config.excellent !== null && this.config.good !== null &&
-           this.config.fair !== null && this.config.inferior !== null && this.config.poor !== null;
+      this.config.fair !== null && this.config.inferior !== null && this.config.poor !== null;
   }
+
+  private sensors: EnviroplusSensor[] = [];
 
   constructor(
     public readonly log: Logger,
@@ -42,6 +44,11 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
       log.debug('Executed didFinishLaunching callback');
       // run the method to discover / register your devices as accessories
       this.discoverDevices();
+    });
+
+    this.api.on('shutdown', () => {
+      log.debug('Executed shutdown callback');
+      this.shutdown();
     });
   }
 
@@ -86,7 +93,7 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
 
         // create the accessory handler for the restored accessory
         // this is imported from `platformAccessory.ts`
-        new EnviroplusSensor(this, existingAccessory);
+        this.sensors.push(new EnviroplusSensor(this, existingAccessory));
       } else {
         // the accessory does not yet exist, so we need to create it
         this.log.info('Adding new accessory:', device.displayName);
@@ -100,11 +107,17 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
 
         // create the accessory handler for the newly create accessory
         // this is imported from `platformAccessory.ts`
-        new EnviroplusSensor(this, accessory);
+        this.sensors.push(new EnviroplusSensor(this, accessory));
 
         // link the accessory to your platform
         this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
       }
+    }
+  }
+
+  shutdown() {
+    for (const sensor of this.sensors) {
+      sensor.shutdown();
     }
   }
 }

@@ -12,13 +12,41 @@ This Homebridge plug-in allows you to make the data available from the [Pimoroni
 
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 
-## Setup Python Server
+## Setup MQTT broker
 
-This Homebridge plug-in reads the data from a web server providing the JSON information, for example:
+This Homebridge plug-in reads the data from an MQTT broker providing the JSON information, for example:
 
 * {"temperature": "13.68", "pressure": "99529.24", "humidity": "75.12", "P2": "19", "P1": "23"}
+* {"temperature": 24, "pressure": 99080, "humidity": 47, "oxidised": 33, "reduced": 1024, "nh3": 1810, "lux": 0, "pm1": 6, "pm25": 7, "pm10": 7, "serial": "0000000012345def"}
 
-Included in the python directory on the [GitHub repository](https://github.com/mhawkshaw/homebridge-enviroplus) for this plug-in you can find an example web server written in Python that you can run on the Raspberry Pi that has the Enviro+ connected to make this data available. This configuration is useful if you are not running the Homebridge server on the same machine that has the Enviro+ connected (most use cases). You can optionally enable IPv6 support by starting the script with the --enableipv6 flag.
+Included in the examples on the [Pimoroni Enviroplus GitHub repository](https://github.com/pimoroni/enviroplus-python/tree/master/examples) you can find a Python script called "mqtt-all.py" that will read the information from the Enviro+ sensors and pass them as JSON values to an MQTT broker. Just start the script, for example:
+
+  python3 mqtt-all.py --broker 192.168.1.164 --topic enviro --username xxx --password xxxx
+
+You need to install an [MQTT broker](http://mosquitto.org/) on your machine, this can be any machine in your network, including the machine running Homebridge. Here are some instructions for popular distributions:
+
+### Raspberry Pi / Ubuntu
+
+In short, you just need to do the following:
+
+  sudo apt-get update
+  sudo apt-get install -y mosquitto mosquitto-clients
+  sudo systemctl enable mosquitto.service
+
+### macOS
+
+Use [Homebrew](https://brew.sh/)
+
+  brew install mosquitto
+
+### Windows
+
+Go to the (Mosquitto Download Page)[https://mosquitto.org/download/] and choose the right installer for your system.
+
+### Enable authentication
+
+A quick search online will provide you with information on how to secure your installation. To help you, I've found the following links for the 
+[Raspberry Pi](https://randomnerdtutorials.com/how-to-install-mosquitto-broker-on-raspberry-pi/) and [Ubuntu](https://www.vultr.com/docs/install-mosquitto-mqtt-broker-on-ubuntu-20-04-server/)
 
 ## Plug-in Installation
 
@@ -32,7 +60,7 @@ Add platform to `config.json`, for configuration see below.
 
 ## Plug-in Configuration
 
-The plug-in needs to know where to find the web server providing the JSON data (e.g. http://127.0.0.1:8001) along with the serial number of the device to uniquely identify it (you can also use your Raspberry Pi identifier).
+The plug-in needs to know where to find the MQTT broker providing the JSON data (e.g. mqtt://127.0.0.1:1883) along with the serial number of the device to uniquely identify it (you can also use your Raspberry Pi identifier).
 
 ```json
 {
@@ -40,14 +68,17 @@ The plug-in needs to know where to find the web server providing the JSON data (
     {
       "platform": "EnviroplusAirQuality",
       "name": "EnviroplusPlatform",
-      "server": "http://127.0.0.1:8001/",
+      "server": "mqtt://127.0.0.1:1883",
+      "topic": "enviro",
+      "username": "",
+      "password": "",
       "serial": "1234567890",
-      "interval": 5,
       "excellent": 10,
       "good": 20,
       "fair": 25,
       "inferior": 50,
-      "poor": 50
+      "poor": 50,
+      "COWarningLevel": 30
     }
   ]
 }
@@ -56,9 +87,13 @@ The plug-in needs to know where to find the web server providing the JSON data (
 
 The following settings are optional:
 
-- `interval`: how often (in minutes) the plug-in will fetch new Enviro+ data from the server. Default is 5.
+- `username`: the MQTT broker username
+- `password`: the MQTT broker password
 - `excellent`: the upper value for PM2.5 air quality considered to be excellent (in micrograms per cubic metre). Default is 10.
 - `good`: the upper value for PM2.5 air quality considered to be good (in micrograms per cubic metre). Default is 20.
 - `fair`: the upper value for PM2.5 air quality considered to be fair (in micrograms per cubic metre). Default is 25.
 - `inferior`: the upper value for PM2.5 air quality considered to be inferior (in micrograms per cubic metre). Default is 50.
 - `poor`: the lowest value for PM2.5 air quality considered to be poor (in micrograms per cubic metre). Anything above this is considered to be poor. Default is 50.
+- `COWarningLevel`: Carbon Monoxide warning level. Measurements above this value are considered abnormal. Default is 30.
+
+Note that there are no international standards for what's considered an abnormal level of Carbon Monoxide (CO). The U.S. National Ambient Air Quality Standards for outdoor air are 9 ppm for 8 hours, and 35 ppm for 1 hour.

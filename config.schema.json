@@ -7,24 +7,36 @@
     "type": "object",
     "properties": {
       "server": {
-        "title": "Enviro+ JSON Server",
+        "title": "MQTT Broker",
         "type": "string",
         "required": true,
         "format": "uri",
-        "default": "http://127.0.0.1:8001/"
+        "default": "mqtt://127.0.0.1:1883"
+      },
+      "topic": {
+        "title": "MQTT Topic",
+        "type": "string",
+        "required": true,
+        "format": "string",
+        "default": "enviro"
+      },
+      "username": {
+        "title": "MQTT Broker username",
+        "type": "string",
+        "required": true,
+        "default": "enviropi"
+      },
+      "password": {
+        "title": "MQTT Broker password",
+        "type": "string",
+        "required": true,
+        "default": "9jWTXMioQmidgNpcQD6iGWXftkptHF"
       },
       "serial": {
         "title": "Enviro+ Serial Number",
         "type": "string",
         "required": true,
         "default": "1234567890"
-      },
-      "interval": {
-        "title": "How often to fetch updated environment values from the Enviro+ server in minutes",
-        "type": "integer",
-        "required": true,
-        "default": 5,
-        "minimum": 1
       },
       "excellent": {
         "title": "The upper value for PM2.5 air quality considered to be excellent (in micrograms per cubic metre)",
@@ -65,6 +77,14 @@
         "minimum": 0,
         "maximum": 1000,
         "default": 50
+      },
+      "COWarningLevel": {
+        "title": "Carbon Monoxide warning level. A number higher than this is considered abnormal.",
+        "type": "integer",
+        "required": true,
+        "minimum": 0,
+        "maximum": 1000,
+        "default": 30
       }
     }
   }
