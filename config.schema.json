@@ -77,14 +77,6 @@
         "minimum": 0,
         "maximum": 1000,
         "default": 50
-      },
-      "COWarningLevel": {
-        "title": "Carbon Monoxide warning level. A number higher than this is considered abnormal.",
-        "type": "integer",
-        "required": true,
-        "minimum": 0,
-        "maximum": 1000,
-        "default": 30
       }
     }
   }
