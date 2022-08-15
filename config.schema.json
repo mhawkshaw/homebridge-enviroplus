@@ -6,7 +6,7 @@
   "schema": {
     "type": "object",
     "properties": {
-      "server": {
+      "mqttbroker": {
         "title": "MQTT Broker",
         "type": "string",
         "required": true,
@@ -24,13 +24,13 @@
         "title": "MQTT Broker username",
         "type": "string",
         "required": true,
-        "default": "enviropi"
+        "default": ""
       },
       "password": {
         "title": "MQTT Broker password",
         "type": "string",
         "required": true,
-        "default": "9jWTXMioQmidgNpcQD6iGWXftkptHF"
+        "default": ""
       },
       "serial": {
         "title": "Enviro+ Serial Number",

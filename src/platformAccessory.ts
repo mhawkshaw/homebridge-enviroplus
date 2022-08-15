@@ -123,7 +123,7 @@ export class EnviroplusSensor {
       password: this.platform.config.password,
     };
 
-    let brokerUrl = this.platform.config.server;
+    let brokerUrl = this.platform.config.mqttbroker;
 
     // URL needs to include mqtt:// prefix
     if (brokerUrl && !brokerUrl.includes('://')) {
