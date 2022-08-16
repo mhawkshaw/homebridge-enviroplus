@@ -29,7 +29,7 @@ export class EnviroplusSensor {
   private temperatureService: Service;
   private lightSensorService: Service;
 
-  // User to store the sensor data for quick retrieval
+  // Use to store the sensor data for quick retrieval
   private sensorData = {
     airQuality: this.platform.Characteristic.AirQuality.UNKNOWN,
     temperature: -270,
@@ -130,20 +130,36 @@ export class EnviroplusSensor {
       brokerUrl = 'mqtt://' + brokerUrl;
     }
 
+    this.platform.log.info("Connecting to MQTT broker...");
     this.mqttClient = connect(brokerUrl, options);
-
-    this.mqttClient.subscribe(this.platform.config.topic, { qos: 0 }, (error, granted) => {
-      if (error) {
-        this.platform.log.error('Unable to connect to the MQTT broker: ' + error.name + ' ' + error.message);
-      } else {
-        this.platform.log.debug(granted[0].topic + ' was subscribed');
-      }
-    });
 
     this.mqttClient.on('message', (topic, message) => {
       this.platform.log.debug(message.toString('utf-8'));
       const enviroPlusData: EnviroPlusJson = JSON.parse(message.toString('utf-8'));
       this.mapJsonData(enviroPlusData);
+    });
+
+    this.mqttClient.on('connect', () => {
+      this.platform.log.info("Connected to MQTT broker");
+
+      this.mqttClient.subscribe(this.platform.config.topic, { qos: 0 }, (error, granted) => {
+        if (error) {
+          this.platform.log.error('Unable to connect to the MQTT broker: ' + error.name + ' ' + error.message);
+        } else {
+          // If we're re-connecting then the existing topic subscription should still be persisted.
+          if (granted.length > 0) {
+            this.platform.log.debug(granted[0].topic + ' was subscribed');
+          }
+        }
+      });
+    });
+
+    this.mqttClient.on('disconnect', () => {
+      this.platform.log.warn("Disconnected from MQTT broker");
+    });
+
+    this.mqttClient.on('error', (error) => {
+      this.platform.log.error("Problem with MQTT broker: " + error.message);
     });
   }
 

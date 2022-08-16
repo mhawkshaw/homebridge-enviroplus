@@ -23,13 +23,13 @@
       "username": {
         "title": "MQTT Broker username",
         "type": "string",
-        "required": true,
+        "required": false,
         "default": ""
       },
       "password": {
         "title": "MQTT Broker password",
         "type": "string",
-        "required": true,
+        "required": false,
         "default": ""
       },
       "serial": {
