@@ -130,7 +130,7 @@ export class EnviroplusSensor {
       brokerUrl = 'mqtt://' + brokerUrl;
     }
 
-    this.platform.log.info("Connecting to MQTT broker...");
+    this.platform.log.info('Connecting to MQTT broker...');
     this.mqttClient = connect(brokerUrl, options);
 
     this.mqttClient.on('message', (topic, message) => {
@@ -140,7 +140,7 @@ export class EnviroplusSensor {
     });
 
     this.mqttClient.on('connect', () => {
-      this.platform.log.info("Connected to MQTT broker");
+      this.platform.log.info('Connected to MQTT broker');
 
       this.mqttClient.subscribe(this.platform.config.topic, { qos: 0 }, (error, granted) => {
         if (error) {
@@ -155,11 +155,11 @@ export class EnviroplusSensor {
     });
 
     this.mqttClient.on('disconnect', () => {
-      this.platform.log.warn("Disconnected from MQTT broker");
+      this.platform.log.warn('Disconnected from MQTT broker');
     });
 
     this.mqttClient.on('error', (error) => {
-      this.platform.log.error("Problem with MQTT broker: " + error.message);
+      this.platform.log.error('Problem with MQTT broker: ' + error.message);
     });
   }
 
