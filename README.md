@@ -20,7 +20,7 @@ This Homebridge plug-in reads the data from an MQTT broker providing the JSON in
 
 Included in the examples on the [Pimoroni Enviroplus GitHub repository](https://github.com/pimoroni/enviroplus-python/tree/master/examples) you can find a Python script called "mqtt-all.py" that will read the information from the Enviro+ sensors and pass them as JSON values to an MQTT broker. Just start the script, for example:
 
-  python3 mqtt-all.py --broker 192.168.1.164 --topic enviro --username xxx --password xxxx
+    python3 mqtt-all.py --broker 192.168.1.164 --topic enviro --username xxx --password xxxx
 
 You need to install an [MQTT broker](http://mosquitto.org/) on your machine, this can be any machine in your network, including the machine running Homebridge. Here are some instructions for popular distributions:
 
@@ -28,15 +28,15 @@ You need to install an [MQTT broker](http://mosquitto.org/) on your machine, thi
 
 In short, you just need to do the following:
 
-  sudo apt-get update
-  sudo apt-get install -y mosquitto mosquitto-clients
-  sudo systemctl enable mosquitto.service
+    sudo apt-get update
+    sudo apt-get install -y mosquitto mosquitto-clients
+    sudo systemctl enable mosquitto.service
 
 ### macOS
 
 Use [Homebrew](https://brew.sh/)
 
-  brew install mosquitto
+    brew install mosquitto
 
 ### Windows
 
