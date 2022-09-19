@@ -40,7 +40,7 @@ Use [Homebrew](https://brew.sh/)
 
 ### Windows
 
-Go to the (Mosquitto Download Page)[https://mosquitto.org/download/] and choose the right installer for your system.
+Go to the [Mosquitto Download Page](https://mosquitto.org/download/) and choose the right installer for your system.
 
 ### Enable authentication
 
