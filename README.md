@@ -66,8 +66,7 @@ The plug-in needs to know where to find the MQTT broker providing the JSON data 
   "platforms": [
     {
       "platform": "EnviroplusAirQuality",
-      "name": "EnviroplusPlatform",
-      "server": "mqtt://127.0.0.1:1883",
+      "mqttbroker": "mqtt://127.0.0.1:1883",
       "topic": "enviro",
       "username": "",
       "password": "",
@@ -76,8 +75,7 @@ The plug-in needs to know where to find the MQTT broker providing the JSON data 
       "good": 20,
       "fair": 25,
       "inferior": 50,
-      "poor": 50,
-      "COWarningLevel": 30
+      "poor": 50
     }
   ]
 }
@@ -93,6 +91,5 @@ The following settings are optional:
 - `fair`: the upper value for PM2.5 air quality considered to be fair (in micrograms per cubic metre). Default is 25.
 - `inferior`: the upper value for PM2.5 air quality considered to be inferior (in micrograms per cubic metre). Default is 50.
 - `poor`: the lowest value for PM2.5 air quality considered to be poor (in micrograms per cubic metre). Anything above this is considered to be poor. Default is 50.
-- `COWarningLevel`: Carbon Monoxide warning level. Measurements above this value are considered abnormal. Default is 30.
 
 Note that there are no international standards for what's considered an abnormal level of Carbon Monoxide (CO). The U.S. National Ambient Air Quality Standards for outdoor air are 9 ppm for 8 hours, and 35 ppm for 1 hour. 
