@@ -15,8 +15,12 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
   public readonly accessories: PlatformAccessory[] = [];
 
   private configProvided() {
-    return this.config.mqttbroker !== null && this.config.serial !== null && this.config.excellent !== null && this.config.good !== null &&
-      this.config.fair !== null && this.config.inferior !== null && this.config.poor !== null;
+    let provided = this.config.mqttbroker && this.config.devices && this.config.excellent && this.config.good &&
+      this.config.fair && this.config.inferior && this.config.poor;
+    for (const device of this.config.devices) {
+        provided = provided && device.displayName && device.serial && device.topic;
+    }
+    return provided;
   }
 
   private sensors: EnviroplusSensor[] = [];
@@ -30,7 +34,8 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
     // Checks whether a configuration is provided, otherwise the plugin should not be initialized
     if (!this.configProvided()) {
       log.error('Not all configuration provided!');
-      log.info('MQTT Broker for enviroment data is required along with the serial number of the enviroplus device');
+      log.info('MQTT Broker for enviroment data is required along with all the enviro+ devices and their serial numbers, names and' +
+               ' MQTT topics');
       return;
     }
 
@@ -70,18 +75,12 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
    */
   discoverDevices(): void {
 
-    const devices = [
-      {
-        uniqueId: this.config.serial,
-        displayName: 'Enviroplus',
-      },
-    ];
-
     // loop over the discovered devices and register each one if it has not already been registered
-    for (const device of devices) {
+    this.log.debug('Devices:', this.config.devices);
+    for (const device of this.config.devices) {
 
       // generate a unique id for the accessory based on the provided serial number
-      const uuid = this.api.hap.uuid.generate(device.uniqueId);
+      const uuid = this.api.hap.uuid.generate(device.serial);
 
       // see if an accessory with the same uuid has already been registered and restored from
       // the cached devices we stored in the `configureAccessory` method above
@@ -93,7 +92,7 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
 
         // create the accessory handler for the restored accessory
         // this is imported from `platformAccessory.ts`
-        this.sensors.push(new EnviroplusSensor(this, existingAccessory));
+        this.sensors.push(new EnviroplusSensor(this, existingAccessory, device.displayName, device.serial, device.topic));
       } else {
         // the accessory does not yet exist, so we need to create it
         this.log.info('Adding new accessory:', device.displayName);
@@ -107,7 +106,7 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
 
         // create the accessory handler for the newly create accessory
         // this is imported from `platformAccessory.ts`
-        this.sensors.push(new EnviroplusSensor(this, accessory));
+        this.sensors.push(new EnviroplusSensor(this, accessory, device.displayName, device.serial, device.topic));
 
         // link the accessory to your platform
         this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);

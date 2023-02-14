@@ -29,6 +29,8 @@ export class EnviroplusSensor {
   private temperatureService: Service;
   private lightSensorService: Service;
 
+  private mqttTopic = '';
+
   // Use to store the sensor data for quick retrieval
   private sensorData = {
     airQuality: this.platform.Characteristic.AirQuality.UNKNOWN,
@@ -70,14 +72,18 @@ export class EnviroplusSensor {
 
   shutdown() {
     this.platform.log.debug('Shutdown called. Unsubscribing from MQTT broker.');
-    this.mqttClient.unsubscribe(this.platform.config.topic);
+    this.mqttClient.unsubscribe(this.mqttTopic);
     this.mqttClient.end();
   }
 
   constructor(
     private readonly platform: EnviroplusPlatform,
     private readonly accessory: PlatformAccessory,
+    private readonly displayName: string,
+    private readonly serial: string,
+    private readonly topic: string,
   ) {
+    this.mqttTopic = topic;
 
     // set accessory information
     const accessoryInfo: Service | undefined = this.accessory.getService(this.platform.Service.AccessoryInformation);
@@ -85,7 +91,7 @@ export class EnviroplusSensor {
     if (accessoryInfo !== undefined) {
       accessoryInfo.setCharacteristic(this.platform.Characteristic.Manufacturer, 'Pimoroni')
         .setCharacteristic(this.platform.Characteristic.Model, 'EnviroPlus')
-        .setCharacteristic(this.platform.Characteristic.SerialNumber, this.platform.config.serial);
+        .setCharacteristic(this.platform.Characteristic.SerialNumber, serial);
     }
 
     this.airQualityService = this.accessory.getService(this.platform.Service.AirQualitySensor) ||
@@ -142,7 +148,7 @@ export class EnviroplusSensor {
     this.mqttClient.on('connect', () => {
       this.platform.log.info('Connected to MQTT broker');
 
-      this.mqttClient.subscribe(this.platform.config.topic, { qos: 0 }, (error, granted) => {
+      this.mqttClient.subscribe(this.mqttTopic, { qos: 0 }, (error, granted) => {
         if (error) {
           this.platform.log.error('Unable to connect to the MQTT broker: ' + error.name + ' ' + error.message);
         } else {

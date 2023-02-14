@@ -13,13 +13,6 @@
         "format": "uri",
         "default": "mqtt://127.0.0.1:1883"
       },
-      "topic": {
-        "title": "MQTT Topic",
-        "type": "string",
-        "required": true,
-        "format": "string",
-        "default": "enviro"
-      },
       "username": {
         "title": "MQTT Broker username",
         "type": "string",
@@ -32,11 +25,37 @@
         "required": false,
         "default": ""
       },
-      "serial": {
-        "title": "Enviro+ Serial Number",
-        "type": "string",
+      "devices": {
+        "title": "Enviro+ Devices",
+        "type": "array",
+        "uniqueItems": true,
         "required": true,
-        "default": "1234567890"
+        "items": {
+          "title": "Devices",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "displayName": {
+              "title": "Enviro+ Display Name",
+              "type": "string",
+              "required": true,
+              "default": ""
+            },
+            "serial": {
+              "title": "Enviro+ Serial Number",
+              "type": "string",
+              "required": true,
+             "default": "1234567890"
+            },
+            "topic": {
+              "title": "MQTT Topic",
+              "type": "string",
+              "required": true,
+              "format": "string",
+              "default": "enviro"
+            }
+          }
+        }
       },
       "excellent": {
         "title": "The upper value for PM2.5 air quality considered to be excellent (in micrograms per cubic metre)",
