@@ -16,7 +16,8 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
 
   private configProvided() {
     let provided = this.config.mqttbroker && this.config.devices && this.config.excellent && this.config.good &&
-      this.config.fair && this.config.inferior && this.config.poor;
+      this.config.fair && this.config.inferior && this.config.poor &&
+      Array.isArray(this.config.devices) && this.config.devices.length !== 0;
     for (const device of this.config.devices) {
       provided = provided && device.displayName && device.serial && device.topic;
     }
