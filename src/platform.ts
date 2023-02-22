@@ -15,11 +15,15 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
   public readonly accessories: PlatformAccessory[] = [];
 
   private configProvided() {
-    let provided = this.config.mqttbroker && this.config.devices && this.config.excellent && this.config.good &&
-      this.config.fair && this.config.inferior && this.config.poor &&
-      Array.isArray(this.config.devices) && this.config.devices.length !== 0;
-    for (const device of this.config.devices) {
-      provided = provided && device.displayName && device.serial && device.topic;
+    let provided = this.config.mqttbroker && this.config.excellent && this.config.good &&
+      this.config.fair && this.config.inferior && this.config.poor;
+    if (this.config.devices && Array.isArray(this.config.devices) && this.config.devices.length !== 0) {
+      for (const device of this.config.devices) {
+        provided = provided && device.displayName && device.serial && device.topic;
+      }
+    } else if (this.config.devices) {
+      provided = false;
+      this.log.error('The devices property is not of type array. Cannot initialise. Type %s', typeof this.config.devices);
     }
     return provided;
   }
@@ -36,7 +40,7 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
     if (!this.configProvided()) {
       log.error('Not all configuration provided!');
       log.info('MQTT Broker for enviroment data is required along with all the enviro+ devices and their serial numbers, names and' +
-               ' MQTT topics');
+        ' MQTT topics');
       return;
     }
 
