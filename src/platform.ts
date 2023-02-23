@@ -19,7 +19,9 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
       this.config.fair && this.config.inferior && this.config.poor;
     if (this.config.devices && Array.isArray(this.config.devices) && this.config.devices.length !== 0) {
       for (const device of this.config.devices) {
-        provided = provided && device.displayName && device.serial && device.topic;
+        if (device) {
+          provided = provided && device.displayName && device.serial && device.topic;
+        }
       }
     } else if (this.config.devices) {
       provided = false;

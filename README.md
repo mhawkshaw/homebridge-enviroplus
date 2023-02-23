@@ -97,4 +97,4 @@ The following settings are optional:
 - `inferior`: the upper value for PM2.5 air quality considered to be inferior (in micrograms per cubic metre). Default is 50.
 - `poor`: the lowest value for PM2.5 air quality considered to be poor (in micrograms per cubic metre). Anything above this is considered to be poor. Default is 50.
 
-Note that there are no international standards for what's considered an abnormal level of Carbon Monoxide (CO). The U.S. National Ambient Air Quality Standards for outdoor air are 9 ppm for 8 hours, and 35 ppm for 1 hour. 
+If you have multiple Enviro+ devices, then you can list them all in the config giving each one a unique name, MQTT topic and serial number.
