@@ -23,9 +23,9 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
           provided = provided && device.displayName && device.serial && device.topic;
         }
       }
-    } else if (this.config.devices) {
+    } else {
       provided = false;
-      this.log.error('The devices property is not of type array. Cannot initialise. Type %s', typeof this.config.devices);
+      this.log.error('The devices property is not of type array or is empty. Cannot initialise. Type %s', typeof this.config.devices);
     }
     return provided;
   }
