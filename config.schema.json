@@ -4,13 +4,13 @@
   "singular": true,
   "headerDisplay": "The Pimoroni Enviro+ Sensor for the Raspberry Pi provides environmental data.",
   "schema": {
-    "name": {
-      "type": "string",
-      "title": "Plugin name as shown in Homebridge Log",
-      "default": "EnviroPlus"
-    },
     "type": "object",
     "properties": {
+      "name": {
+        "type": "string",
+        "title": "Plugin name as shown in Homebridge Log",
+        "default": "EnviroPlus"
+      },
       "mqttbroker": {
         "title": "MQTT Broker",
         "type": "string",
