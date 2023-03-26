@@ -66,6 +66,7 @@ The plug-in needs to know where to find the MQTT broker providing the JSON data 
   "platforms": [
     {
       "platform": "EnviroplusAirQuality",
+      "name": "EnviroPlus",
       "mqttbroker": "mqtt://127.0.0.1:1883",
       "username": "",
       "password": "",
