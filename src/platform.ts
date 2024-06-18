@@ -37,6 +37,8 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
     public readonly config: PlatformConfig,
     public readonly api: API,
   ) {
+    this.Service = api.hap.Service;
+    this.Characteristic = api.hap.Characteristic;
 
     // Checks whether a configuration is provided, otherwise the plugin should not be initialized
     if (!this.configProvided()) {
