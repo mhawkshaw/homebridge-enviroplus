@@ -1,15 +1,15 @@
-import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
+import { API, DynamicPlatformPlugin, Logging, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
 
-import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
-import { EnviroplusSensor } from './platformAccessory';
+import { PLATFORM_NAME, PLUGIN_NAME } from './settings.js';
+import { EnviroplusSensor } from './platformAccessory.js';
 
 /**
  * EnviroplusPlatform
  * Here the user config is loaded and the Enviroplus accessories are created
  */
 export class EnviroplusPlatform implements DynamicPlatformPlugin {
-  public readonly Service: typeof Service = this.api.hap.Service;
-  public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
+  public readonly Service: typeof Service;
+  public readonly Characteristic: typeof Characteristic;
 
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = [];
@@ -33,7 +33,7 @@ export class EnviroplusPlatform implements DynamicPlatformPlugin {
   private sensors: EnviroplusSensor[] = [];
 
   constructor(
-    public readonly log: Logger,
+    public readonly log: Logging,
     public readonly config: PlatformConfig,
     public readonly api: API,
   ) {

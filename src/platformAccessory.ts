@@ -1,6 +1,6 @@
 import { Service, PlatformAccessory } from 'homebridge';
 
-import { EnviroplusPlatform } from './platform';
+import { EnviroplusPlatform } from './platform.js';
 
 import { MqttClient, connect } from 'mqtt';
 
@@ -33,7 +33,7 @@ export class EnviroplusSensor {
 
   // Use to store the sensor data for quick retrieval
   private sensorData = {
-    airQuality: this.platform.Characteristic.AirQuality.UNKNOWN,
+    airQuality: 0,
     temperature: -270,
     humidity: 0,
     lux: 0.0001,
