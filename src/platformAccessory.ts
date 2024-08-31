@@ -1,6 +1,6 @@
-import { Service, PlatformAccessory } from 'homebridge';
+import type { Service, PlatformAccessory } from 'homebridge';
 
-import { EnviroplusPlatform } from './platform.js';
+import type { EnviroplusPlatform } from './platform.js';
 
 import { MqttClient, connect } from 'mqtt';
 
@@ -86,13 +86,10 @@ export class EnviroplusSensor {
     this.mqttTopic = topic;
 
     // set accessory information
-    const accessoryInfo: Service | undefined = this.accessory.getService(this.platform.Service.AccessoryInformation);
-
-    if (accessoryInfo !== undefined) {
-      accessoryInfo.setCharacteristic(this.platform.Characteristic.Manufacturer, 'Pimoroni')
-        .setCharacteristic(this.platform.Characteristic.Model, 'EnviroPlus')
-        .setCharacteristic(this.platform.Characteristic.SerialNumber, serial);
-    }
+    this.accessory.getService(this.platform.Service.AccessoryInformation)!
+      .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Pimoroni')
+      .setCharacteristic(this.platform.Characteristic.Model, 'EnviroPlus')
+      .setCharacteristic(this.platform.Characteristic.SerialNumber, serial);
 
     this.airQualityService = this.accessory.getService(this.platform.Service.AirQualitySensor) ||
       this.accessory.addService(this.platform.Service.AirQualitySensor);
