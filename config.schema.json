@@ -2,6 +2,7 @@
   "pluginAlias": "EnviroplusAirQuality",
   "pluginType": "platform",
   "singular": true,
+  "strictValidation": false,
   "headerDisplay": "The Pimoroni Enviro+ Sensor for the Raspberry Pi provides environmental data.",
   "schema": {
     "type": "object",
